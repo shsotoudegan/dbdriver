@@ -132,3 +132,4 @@ dmypy.json
 test.py
 test.db
 test.sqlite3
+test
