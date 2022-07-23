@@ -9,14 +9,22 @@ class DBdriver():
 
     def __init__(self, name: str, dir=__DIR.parent):
         self.dbname = name
-        self.dbpath = dir.__str__() + self.dbname + '.db'
-        self.conection = sqlite3.connect(self.dbpath)
-        self.cursor = self.conection.cursor()
+        self.dbpath = dir.__str__() + '/' + self.dbname + '.db'
 
+    def __cncdec(func):
+        def wrapper(*args, **kwargs):
+            self = args[0]
+            self.conection = sqlite3.connect(self.dbpath)
+            self.cursor = self.conection.cursor()
+            result = func(*args, **kwargs)
+            self.conection.commit()
+            self.conection.close()
+            return result
+        return wrapper
+
+    @__cncdec
     def create_table(self, name: str, *columns):
         string = ''
         for column in columns:
-            string = string + column
-        print(string)
+            string = string + column + ' '
         self.cursor.execute(f"CREATE TABLE {name} ({string});")
-        self.conection.commit()
