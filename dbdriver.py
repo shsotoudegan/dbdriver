@@ -54,3 +54,13 @@ class DBdriver():
     @__conection_manager
     def remove(self, table, rowid: int):
         self.cursor.execute(f"DELETE from {table} WHERE rowid = {rowid};")
+
+    @__conection_manager
+    def insertMore(self, table, values):
+        for value in values:
+            self.insert(table, value)
+
+    @__conection_manager
+    def removeMore(self, table, rowids):
+        for rowid in rowids:
+            self.remove(table, rowid)
