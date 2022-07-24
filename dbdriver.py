@@ -64,3 +64,20 @@ class DBdriver():
     def removeMore(self, table, rowids):
         for rowid in rowids:
             self.remove(table, rowid)
+
+    @__conection_manager
+    def get(self, table, rowid):
+        self.cursor.execute(f"SELECT * FROM {table} WHERE rowid = {rowid}")
+        return self.cursor.fetchall()
+
+    @__conection_manager
+    def getMore(self, table, rowids):
+        values = []
+        for rowid in rowids:
+            values.append(self.get(table, rowid))
+        return values
+
+    @__conection_manager
+    def getTable(self, table):
+        self.cursor.execute(f"SELECT * FROM {table}")
+        return self.cursor.fetchall()
